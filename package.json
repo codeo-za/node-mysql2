@@ -1,5 +1,5 @@
 {
-  "name": "mysql2",
+  "name": "@codeo-za/mysql2",
   "version": "3.9.2",
   "description": "fast mysql driver. Implements core protocol, prepared statements, ssl and compression in native JS",
   "main": "index.js",
