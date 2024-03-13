@@ -1,0 +1,38 @@
+name: Publish Package to Github Package Manager
+on:
+    workflow_dispatch:
+
+concurrency:
+    group: release-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: read
+            packages: write
+
+        strategy:
+            matrix:
+                node-version: [18.x]
+                redis-version: [7]
+
+        steps:
+            - name: ✔️ Checkout
+              uses: actions/checkout@v2
+
+            - name: "🧪 Run Tests and publish"
+              env:
+                NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                npm i
+                npm test
+                npm run build
+                npm publish
+              with:
+                registry-url: 'https://npm.pkg.github.com'
+                scope: '@codeo-za'
+                redis-version: ${{ matrix.redis-version }}
+                node-version: ${{ matrix.node-version }}
